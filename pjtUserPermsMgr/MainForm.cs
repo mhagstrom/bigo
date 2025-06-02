@@ -26,6 +26,7 @@ public partial class MainForm : Form
             return;
         }
 
+        //StringComparison OrdinalIgnoreCase is for case-insensitive comparison to ensure no usermade NoPerms role can exist.
         if (newPermission.Equals("NoPerms", StringComparison.OrdinalIgnoreCase))
         {
             MessageBox.Show("Cannot add 'NoPerms' as it is a reserved permission type.");
@@ -104,7 +105,7 @@ public partial class MainForm : Form
         }
     }
 
-    private void assignRoleButton_Click(object sender, EventArgs e)
+    private void BtnAssignRoleClick(object sender, EventArgs e)
     {
         string username = txbUsername.Text.Trim();
         string role = cmbRoles.SelectedItem?.ToString();
@@ -122,7 +123,7 @@ public partial class MainForm : Form
         }
     }
 
-    private void removeRoleButton_Click(object sender, EventArgs e)
+    private void BtnRemoveRoleClick(object sender, EventArgs e)
     {
         string username = txbUsername.Text.Trim();
         string role = cmbRoles.SelectedItem?.ToString();
@@ -249,7 +250,7 @@ public partial class MainForm : Form
             {
                 if (cmbSearchMethod.SelectedItem.ToString() == "Linear Search")
                 {
-                    // Linear Search - O(n) time complexity
+                    // Linear Search - O(n)
                     if (users.Count > 0)
                     {
                         lsbResults.Items.Add($"Users with permission '{searchPermission}' (using Linear Search):");
@@ -300,7 +301,7 @@ public partial class MainForm : Form
 
         var userRoles = new List<string>();
         
-        // O(n) time complexity where n is the number of roles
+        // O(n)
         foreach (var role in permissions)
         {
             if (role.Value.Contains(username))
@@ -366,7 +367,7 @@ public partial class MainForm : Form
         }
     }
 
-    // Quick Sort - O(n log n) average case
+    // Quick Sort - O(n log n)
     private void QuickSort(List<string> items, int low, int high)
     {
         if (low < high)

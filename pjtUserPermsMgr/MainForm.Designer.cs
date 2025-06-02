@@ -25,7 +25,7 @@ partial class MainForm
         cmbRoles = new System.Windows.Forms.ComboBox();
         lsbPerms = new System.Windows.Forms.ListBox();
         btnAddUser = new System.Windows.Forms.Button();
-        btnAddRole = new System.Windows.Forms.Button();
+        btnAssignRole = new System.Windows.Forms.Button();
         btnRemoveRole = new System.Windows.Forms.Button();
         lblUsername = new System.Windows.Forms.Label();
         lblRole = new System.Windows.Forms.Label();
@@ -89,15 +89,16 @@ partial class MainForm
         btnAddUser.Text = "Add User";
         btnAddUser.Click += BtnAddUserClick;
         // 
-        // btnAddRole
+        // btnAssignRole
         // 
-        btnAddRole.AutoSize = true;
-        btnAddRole.Location = new System.Drawing.Point(309, 48);
-        btnAddRole.MinimumSize = new System.Drawing.Size(104, 29);
-        btnAddRole.Name = "btnAddRole";
-        btnAddRole.Size = new System.Drawing.Size(104, 30);
-        btnAddRole.TabIndex = 18;
-        btnAddRole.Text = "Assign Role";
+        btnAssignRole.AutoSize = true;
+        btnAssignRole.Location = new System.Drawing.Point(309, 48);
+        btnAssignRole.MinimumSize = new System.Drawing.Size(104, 29);
+        btnAssignRole.Name = "btnAssignRole";
+        btnAssignRole.Size = new System.Drawing.Size(104, 30);
+        btnAssignRole.TabIndex = 18;
+        btnAssignRole.Text = "Assign Role";
+        btnAssignRole.Click += BtnAssignRoleClick;
         // 
         // btnRemoveRole
         // 
@@ -108,6 +109,7 @@ partial class MainForm
         btnRemoveRole.Size = new System.Drawing.Size(114, 30);
         btnRemoveRole.TabIndex = 19;
         btnRemoveRole.Text = "Remove Role";
+        btnRemoveRole.Click += BtnRemoveRoleClick;
         // 
         // lblUsername
         // 
@@ -342,7 +344,7 @@ partial class MainForm
         Controls.Add(lblPerms);
         Controls.Add(lsbPerms);
         Controls.Add(btnAddUser);
-        Controls.Add(btnAddRole);
+        Controls.Add(btnAssignRole);
         Controls.Add(btnRemoveRole);
         Controls.Add(btnSearch);
         Controls.Add(btnUserRoles);
@@ -366,7 +368,7 @@ partial class MainForm
     private ComboBox cmbRoles;
     private ListBox lsbPerms;
     private Button btnAddUser;
-    private Button btnAddRole;
+    private Button btnAssignRole;
     private Button btnRemoveRole;
     private Button btnSearch;
     private Button btnUserRoles;
