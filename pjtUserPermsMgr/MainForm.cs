@@ -35,7 +35,7 @@ public class OperationTimer : IDisposable
 public partial class MainForm : Form
 {
     private HashSet<string> whitelist = new HashSet<string>();
-    private Dictionary<string, HashSet<string>> permissions = new Dictionary<string, HashSet<string>>
+    private Dictionary<string, HashSet<string>> permsDictionary = new Dictionary<string, HashSet<string>>
     {
         {"NoPerms", new HashSet<string>()}
     };
@@ -45,7 +45,7 @@ public partial class MainForm : Form
     public MainForm()
     {
         InitializeComponent();
-        RefreshRolesList();
+        RefreshPermissionsList();
     }
 
     private void addPermissionButton_Click(object sender, EventArgs e)
@@ -65,14 +65,14 @@ public partial class MainForm : Form
             return;
         }
 
-        if (permissions.ContainsKey(newPermission))
+        if (permsDictionary.ContainsKey(newPermission))
         {
             MessageBox.Show("This permission already exists.");
             return;
         }
 
-        permissions.Add(newPermission, new HashSet<string>());
-        RefreshRolesList();
+        permsDictionary.Add(newPermission, new HashSet<string>());
+        RefreshPermissionsList();
         MessageBox.Show($"Added new permission type: {newPermission}");
     }
 
@@ -92,37 +92,44 @@ public partial class MainForm : Form
             return;
         }
         
-        var affectedUsers = permissions[selectedPermission]
-            .Where(user => permissions
+        var affectedUsers = permsDictionary[selectedPermission]
+            .Where(user => permsDictionary
                 .Where(p => p.Key != "NoPerms" && p.Key != selectedPermission)
                 .All(p => !p.Value.Contains(user)))
             .ToList();
         
         foreach (var user in affectedUsers)
         {
-            permissions["NoPerms"].Add(user);
+            permsDictionary["NoPerms"].Add(user);
         }
         
-        permissions.Remove(selectedPermission);
+        permsDictionary.Remove(selectedPermission);
         
-        RefreshRolesList();
+        RefreshPermissionsList();
         MessageBox.Show($"Removed permission type: {selectedPermission}\n" +
                        $"Users affected: {affectedUsers.Count}");
     }
 
-    private void RefreshRolesList()
+    private void RefreshPermissionsList()
     {
         var selectedRole = cmbPerms.SelectedItem?.ToString();
         cmbPerms.Items.Clear();
-        cmbPerms.Items.AddRange(permissions.Keys.ToArray());
+        cmbPerms.Items.AddRange(permsDictionary.Keys.ToArray());
         
-        if (!string.IsNullOrEmpty(selectedRole) && permissions.ContainsKey(selectedRole))
+        if (!string.IsNullOrEmpty(selectedRole) && permsDictionary.ContainsKey(selectedRole))
         {
             cmbPerms.SelectedItem = selectedRole;
         }
         else
         {
             cmbPerms.SelectedIndex = 0;
+        }
+
+        foreach (KeyValuePair<string, HashSet<string>> element in permsDictionary)
+        {
+            List<string> users = element.Value.ToList();
+            
+            Console.WriteLine($"{element.Key}: {users}");
         }
     }
 
@@ -131,7 +138,7 @@ public partial class MainForm : Form
         string username = txbUsername.Text.Trim();
         if (!string.IsNullOrEmpty(username) && whitelist.Add(username))
         {
-            permissions["NoPerms"].Add(username);
+            permsDictionary["NoPerms"].Add(username);
             MessageBox.Show($"Added {username} to whitelist with NoPerms role.");
             RefreshPermsList();
         }
@@ -142,14 +149,14 @@ public partial class MainForm : Form
         string username = txbUsername.Text.Trim();
         string role = cmbPerms.SelectedItem?.ToString();
 
-        if (!string.IsNullOrEmpty(username) && permissions.ContainsKey(role))
+        if (!string.IsNullOrEmpty(username) && permsDictionary.ContainsKey(role))
         {
             if (role != "NoPerms")
             {
-                permissions["NoPerms"].Remove(username);
+                permsDictionary["NoPerms"].Remove(username);
             }
         
-            permissions[role].Add(username);
+            permsDictionary[role].Add(username);
             MessageBox.Show($"Assigned role {role} to {username}.");
             RefreshPermsList();
         }
@@ -160,17 +167,17 @@ public partial class MainForm : Form
         string username = txbUsername.Text.Trim();
         string role = cmbPerms.SelectedItem?.ToString();
 
-        if (!string.IsNullOrEmpty(username) && permissions.ContainsKey(role))
+        if (!string.IsNullOrEmpty(username) && permsDictionary.ContainsKey(role))
         {
-            if (permissions[role].Remove(username))
+            if (permsDictionary[role].Remove(username))
             {
-                bool hasOtherRoles = permissions
+                bool hasOtherRoles = permsDictionary
                     .Where(p => p.Key != "NoPerms")
                     .Any(p => p.Value.Contains(username));
                 
                 if (!hasOtherRoles)
                 {
-                    permissions["NoPerms"].Add(username);
+                    permsDictionary["NoPerms"].Add(username);
                     MessageBox.Show($"Removed role {role} from {username}. User now has NoPerms role.");
                 }
                 else
@@ -183,6 +190,8 @@ public partial class MainForm : Form
         }
     }
 
+   
+    /*
     private void BtnSearchClick(object sender, EventArgs e) 
         // Binary Search - O(log n) - requires sorted array , Linear Search - O(n) time complexity
     {
@@ -202,9 +211,9 @@ public partial class MainForm : Form
             {
                 
                 var userPermissions = new List<string>();
-                foreach (var permission in permissions.Keys)
+                foreach (var permission in permsDictionary.Keys)
                 {
-                    if (permissions[permission].Contains(searchUsername))
+                    if (permsDictionary[permission].Contains(searchUsername))
                     {
                         userPermissions.Add(permission);
                     }
@@ -220,13 +229,13 @@ public partial class MainForm : Form
                 }
                 else
                 {
-                    lsbResults.Items.Add($"No permissions found for user '{searchUsername}'");
+                    lsbResults.Items.Add($"No permsDictionary found for user '{searchUsername}'");
                 }
             }
             else
             {
                 var allPermissionUsers = new List<(string Permission, string User)>();
-                foreach (var permission in permissions)
+                foreach (var permission in permsDictionary)
                 {
                     foreach (var user in permission.Value)
                     {
@@ -272,13 +281,13 @@ public partial class MainForm : Form
 
                 if (!found)
                 {
-                    lsbResults.Items.Add($"No permissions found for user '{searchUsername}'");
+                    lsbResults.Items.Add($"No permsDictionary found for user '{searchUsername}'");
                 }
             }
         }
         else if (!string.IsNullOrEmpty(searchPermission))
         {
-            if (permissions.TryGetValue(searchPermission, out var users))
+            if (permsDictionary.TryGetValue(searchPermission, out var users))
             {
                 if (cmbSearchMethod.SelectedItem.ToString() == "Linear Search")
                 {
@@ -325,6 +334,147 @@ public partial class MainForm : Form
             lsbResults.Items.Add("No results found");
         }
     }
+    */
+
+    private void BtnSearchClick(object sender, EventArgs e)
+        // Binary Search - O(log n) - requires sorted array , Linear Search - O(n) time complexity
+    {
+        List<string> searchResult = new List<string>();
+        string searchUsername = txbUsername.Text.Trim();
+        string searchPermission = cmbPerms.SelectedItem?.ToString();
+        string searchTerm = string.Empty;
+        lsbResults.Items.Clear();
+
+        if (string.IsNullOrEmpty(searchUsername) && string.IsNullOrEmpty(searchPermission))
+        {
+            MessageBox.Show("Please enter a username or select a permission to search.");
+            return;
+        }
+        bool isBinarySearchType = cmbSearchMethod.SelectedItem.ToString() == "Binary Search";
+        if (!string.IsNullOrEmpty(searchUsername))
+        {
+            if (isBinarySearchType)
+            {
+                using (var timer = new OperationTimer("Binary Search of Users", permsDictionary.Count))
+                {
+                    searchResult = BinarySearch(searchUsername, permsDictionary, true);
+                }
+            }
+            else
+            {
+                using (var timer = new OperationTimer("Linear Search of Users", permsDictionary.Count))
+                {
+                    searchResult = LinearSearch(searchUsername, permsDictionary);
+                }
+            }
+            searchTerm = searchUsername;
+        }
+
+        if (string.IsNullOrEmpty(searchUsername))
+        {
+            if (isBinarySearchType)
+            {
+                using (var timer = new OperationTimer("Binary Search of Permissions", permsDictionary.Count))
+                {
+                    searchResult = BinarySearch(searchPermission, permsDictionary, false);
+                }
+            }
+            else
+            {
+                using (var timer = new OperationTimer("Linear Search of Permissions", permsDictionary.Count))
+                {
+                    searchResult = LinearSearch(searchPermission, permsDictionary);
+                }
+                
+            }
+            searchTerm = searchPermission;
+        }
+        
+        if (searchResult.Count > 0)
+        {
+            lsbResults.Items.Add($"Results for '{searchTerm}' (using {cmbSearchMethod.SelectedItem.ToString()}):");
+            foreach (var result in searchResult)
+            {
+                lsbResults.Items.Add($" - {result}");
+            }
+        }
+        
+    }
+    
+    private List<string> BinarySearch(string searchTerm, Dictionary<string, HashSet<string>> permissionsDict, bool isUserSearch)
+    {
+        List<string> searchResult = new List<string>();
+        List<(string Permission, string User)> tupleAllUserPerms = new List<(string Permission, string User)>();
+        foreach (var permission in permissionsDict)
+        {
+            foreach (var user in permission.Value)
+            {
+                tupleAllUserPerms.Add((permission.Key, user));
+            }
+        }
+        
+        tupleAllUserPerms = tupleAllUserPerms
+            .OrderBy(x => isUserSearch ? x.User : x.Permission)
+            .ToList();
+                
+        int left = 0;
+        int right = tupleAllUserPerms.Count - 1;
+        bool found = false;
+
+        while (left <= right)
+        {
+            int mid = left + (right - left) / 2;
+            int comparison = isUserSearch ? String.Compare(tupleAllUserPerms[mid].User, searchTerm) : String.Compare(tupleAllUserPerms[mid].Permission, searchTerm);
+
+            if (comparison == 0)
+            {
+                found = true;
+                var userPermissions = tupleAllUserPerms
+                    .Where(x => isUserSearch ? x.User == searchTerm : x.Permission == searchTerm)
+                    .Select(x => isUserSearch ? x.Permission : x.User)
+                    .Distinct()
+                    .ToList();
+
+                //searchResult.Add($"Permissions for user '{searchTerm}' (using Binary Search):");
+                foreach (var permission in userPermissions)
+                {
+                    searchResult.Add(permission);
+                }
+                break;
+            }
+
+            if (comparison < 0)
+                left = mid + 1;
+            else
+                right = mid - 1;
+        }
+
+        if (!found)
+        {
+            //searchResult.Add($"No permsDictionary found for user '{searchTerm}'");
+        }
+        
+        return searchResult;
+    }
+    
+    private List<string> LinearSearch(string searchTerm, Dictionary<string, HashSet<string>> permissionsDict)
+    {
+        List<string> searchResult = new List<string>();
+        foreach (var permission in permissionsDict)
+        {
+            if (permission.Value.Contains(searchTerm))
+            {
+                searchResult.Add(permission.Key);
+            }
+            
+            else if (permission.Key == searchTerm)
+            {
+                permissionsDict.TryGetValue(searchTerm, out var users);
+                searchResult = users.ToList();
+            }
+        }
+        return searchResult;
+    }
 
     private void BtnUserPermsClick(object sender, EventArgs e)
     {
@@ -334,7 +484,7 @@ public partial class MainForm : Form
         var userRoles = new List<string>();
         
         // O(n)
-        foreach (var role in permissions)
+        foreach (var role in permsDictionary)
         {
             if (role.Value.Contains(username))
             {
@@ -499,9 +649,9 @@ public partial class MainForm : Form
         string selectedRole = cmbPerms.SelectedItem?.ToString();
         lsbPerms.Items.Clear();
 
-        if (!string.IsNullOrEmpty(selectedRole) && permissions.ContainsKey(selectedRole))
+        if (!string.IsNullOrEmpty(selectedRole) && permsDictionary.ContainsKey(selectedRole))
         {
-            foreach (var user in permissions[selectedRole])
+            foreach (var user in permsDictionary[selectedRole])
             {
                 lsbPerms.Items.Add(user);
             }
@@ -525,7 +675,7 @@ public partial class MainForm : Form
 		{
 			string newUser = $"User_{existingUsers + i}";
 			whitelist.Add(newUser);
-			permissions["NoPerms"].Add(newUser);
+			permsDictionary["NoPerms"].Add(newUser);
 		}
 
 		RefreshPermsList();
@@ -536,21 +686,21 @@ public partial class MainForm : Form
 	{
 		if (whitelist.Count == 0)
 		{
-			MessageBox.Show("No users to assign permissions to.");
+			MessageBox.Show("No users to assign permsDictionary to.");
 			return;
 		}
         
-		var availablePerms = permissions.Keys
+		var availablePerms = permsDictionary.Keys
 			.Where(p => p != "NoPerms")
 			.ToList();
 
 		if (availablePerms.Count == 0)
 		{
-			MessageBox.Show("No permissions available to assign (other than NoPerms).");
+			MessageBox.Show("No permsDictionary available to assign (other than NoPerms).");
 			return;
 		}
         
-		foreach (var perm in permissions.Values)
+		foreach (var perm in permsDictionary.Values)
 		{
 			perm.Clear();
 		}
@@ -560,42 +710,46 @@ public partial class MainForm : Form
 		foreach (var user in users)
 		{
 			double randomValue = random.NextDouble();
-			int numPermsToAssign = (int)(Math.Log(1 - randomValue) * -3.0);
+			int numPermsToAssign = (int)(Math.Log(1 - randomValue) * -8.0);
 			numPermsToAssign = Math.Min(numPermsToAssign, availablePerms.Count);
 
 			if (numPermsToAssign == 0)
 			{
-				permissions["NoPerms"].Add(user);
+				permsDictionary["NoPerms"].Add(user);
 				continue;
 			}
             
 			var shuffledPerms = availablePerms.OrderBy(x => random.Next()).Take(numPermsToAssign);
 			foreach (var perm in shuffledPerms)
 			{
-				permissions[perm].Add(user);
+				permsDictionary[perm].Add(user);
 			}
-		}
+            
+            permsDictionary = permsDictionary
+                .OrderBy(x => random.Next())
+                .ToDictionary(x => x.Key, x => x.Value);
+        }
 
 		RefreshPermsList();
         
 		var stats = whitelist
-			.Select(user => permissions
+			.Select(user => permsDictionary
 				.Count(p => p.Value.Contains(user) && p.Key != "NoPerms"))
 			.GroupBy(count => count)
 			.OrderBy(g => g.Key)
 			.Select(g => $"\n{g.Count()} users have {g.Key} permission(s)")
 			.ToList();
 
-		MessageBox.Show($"Randomized permissions for all users." +
+		MessageBox.Show($"Randomized permsDictionary for all users." +
 					   $"\n\nDistribution:{string.Join("", stats)}");
 	}
 
 private void generatePermissionsButton_Click(object sender, EventArgs e)
 {
     int permCount = (int)nudPermCount.Value;
-    int existingPerms = permissions.Count;
+    int existingPerms = permsDictionary.Count;
     
-    int startNumber = permissions.Keys
+    int startNumber = permsDictionary.Keys
         .Where(p => p.StartsWith("Perm_"))
         .Select(p => 
         {
@@ -609,15 +763,16 @@ private void generatePermissionsButton_Click(object sender, EventArgs e)
     for (int i = 0; i < permCount; i++)
     {
         string newPerm = $"Perm_{startNumber + i}";
-        if (!permissions.ContainsKey(newPerm))
+        if (!permsDictionary.ContainsKey(newPerm))
         {
-            permissions.Add(newPerm, new HashSet<string>());
+            permsDictionary.Add(newPerm, new HashSet<string>());
         }
     }
 
-    RefreshRolesList();
-    MessageBox.Show($"Generated {permCount} new permissions.\n" +
-                   $"Total permissions: {permissions.Count}\n" +
-                   $"(excluding NoPerms: {permissions.Count - 1})");
+    RefreshPermissionsList();
+    
+    MessageBox.Show($"Generated {permCount} new permsDictionary.\n" +
+                   $"Total permsDictionary: {permsDictionary.Count}\n" +
+                   $"(excluding NoPerms: {permsDictionary.Count - 1})");
 }
 }
