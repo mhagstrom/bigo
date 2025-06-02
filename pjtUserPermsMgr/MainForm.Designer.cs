@@ -256,7 +256,7 @@ partial class MainForm
         // nudUserCount
         // 
         nudUserCount.Location = new System.Drawing.Point(126, 420);
-        nudUserCount.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+        nudUserCount.Maximum = new decimal(new int[] { int.MaxValue, 0, 0, 0 });
         nudUserCount.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
         nudUserCount.Name = "nudUserCount";
         nudUserCount.Size = new System.Drawing.Size(150, 27);
@@ -295,7 +295,7 @@ partial class MainForm
         // nudPermCount
         // 
         nudPermCount.Location = new System.Drawing.Point(126, 460);
-        nudPermCount.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+        nudPermCount.Maximum = new decimal(new int[] { int.MaxValue, 0, 0, 0 });
         nudPermCount.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
         nudPermCount.Name = "nudPermCount";
         nudPermCount.Size = new System.Drawing.Size(150, 27);

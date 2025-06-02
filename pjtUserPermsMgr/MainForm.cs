@@ -1,4 +1,36 @@
+using System.Diagnostics;
+
 namespace pjtUserPermsMgr;
+
+public class OperationTimer : IDisposable
+{
+    private readonly string _operationName;
+    private readonly int _operationItems;
+    private readonly Stopwatch _stopwatch;
+    private readonly string _logFilePath;
+    private static readonly object _lockObject = new object();
+
+    public OperationTimer(string operationName, int operationItems)
+    {
+        _operationName = operationName;
+        _operationItems = operationItems;
+        _stopwatch = Stopwatch.StartNew();
+        _logFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "operation_timings.log");
+    }
+
+    public void Dispose()
+    {
+        _stopwatch.Stop();
+        var elapsed = _stopwatch.Elapsed;
+        var logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff} - {_operationName} with {_operationItems} items took {elapsed.TotalMilliseconds:F2}ms";
+        
+        lock (_lockObject)
+        {
+            File.AppendAllLines(_logFilePath, new[] { logMessage });
+        }
+    }
+}
+
 
 public partial class MainForm : Form
 {
@@ -335,13 +367,25 @@ public partial class MainForm : Form
         switch (cmbSortMethod.SelectedItem.ToString())
         {
             case "Bubble Sort":
-                BubbleSort(items); // O(n²)
+                using (var timer = new OperationTimer("Bubble Sort", items.Count))
+                {
+                    BubbleSort(items); // O(n²)
+                }
+
                 break;
             case "Quick Sort":
-                QuickSort(items, 0, items.Count - 1); // O(n log n)
+                using (var timer = new OperationTimer("Quick Sort", items.Count))
+                {
+                    QuickSort(items, 0, items.Count - 1); // O(n log n)
+                }
+
                 break;
             case "Merge Sort":
-                items = MergeSort(items); // O(n log n)
+                using (var timer = new OperationTimer("Merge Sort", items.Count))
+                {
+                    items = MergeSort(items); // O(n log n)
+                }
+
                 break;
         }
 
