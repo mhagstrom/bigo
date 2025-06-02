@@ -22,16 +22,16 @@ partial class MainForm
     private void InitializeComponent()
     {
         txbUsername = new System.Windows.Forms.TextBox();
-        cmbRoles = new System.Windows.Forms.ComboBox();
+        cmbPerms = new System.Windows.Forms.ComboBox();
         lsbPerms = new System.Windows.Forms.ListBox();
         btnAddUser = new System.Windows.Forms.Button();
-        btnAssignRole = new System.Windows.Forms.Button();
-        btnRemoveRole = new System.Windows.Forms.Button();
+        btnAssignPerm = new System.Windows.Forms.Button();
+        btnUnassignPerm = new System.Windows.Forms.Button();
         lblUsername = new System.Windows.Forms.Label();
-        lblRole = new System.Windows.Forms.Label();
+        lblPerm = new System.Windows.Forms.Label();
         lblPerms = new System.Windows.Forms.Label();
         btnSearch = new System.Windows.Forms.Button();
-        btnUserRoles = new System.Windows.Forms.Button();
+        btnUserPerms = new System.Windows.Forms.Button();
         btnSort = new System.Windows.Forms.Button();
         lblSearchResults = new System.Windows.Forms.Label();
         lsbResults = new System.Windows.Forms.ListBox();
@@ -41,7 +41,7 @@ partial class MainForm
         lblNewPermission = new System.Windows.Forms.Label();
         txbNewPermission = new System.Windows.Forms.TextBox();
         btnAddPermission = new System.Windows.Forms.Button();
-        btnRemovePermission = new System.Windows.Forms.Button();
+        btnDeletePermission = new System.Windows.Forms.Button();
         nudUserCount = new System.Windows.Forms.NumericUpDown();
         btnGenerateUsers = new System.Windows.Forms.Button();
         btnRandomizePerms = new System.Windows.Forms.Button();
@@ -61,14 +61,14 @@ partial class MainForm
         txbUsername.Size = new System.Drawing.Size(200, 27);
         txbUsername.TabIndex = 12;
         // 
-        // cmbRoles
+        // cmbPerms
         // 
-        cmbRoles.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-        cmbRoles.Location = new System.Drawing.Point(93, 49);
-        cmbRoles.MinimumSize = new System.Drawing.Size(200, 0);
-        cmbRoles.Name = "cmbRoles";
-        cmbRoles.Size = new System.Drawing.Size(200, 28);
-        cmbRoles.TabIndex = 14;
+        cmbPerms.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+        cmbPerms.Location = new System.Drawing.Point(93, 49);
+        cmbPerms.MinimumSize = new System.Drawing.Size(200, 0);
+        cmbPerms.Name = "cmbPerms";
+        cmbPerms.Size = new System.Drawing.Size(200, 28);
+        cmbPerms.TabIndex = 14;
         // 
         // lsbPerms
         // 
@@ -89,27 +89,27 @@ partial class MainForm
         btnAddUser.Text = "Add User";
         btnAddUser.Click += BtnAddUserClick;
         // 
-        // btnAssignRole
+        // btnAssignPerm
         // 
-        btnAssignRole.AutoSize = true;
-        btnAssignRole.Location = new System.Drawing.Point(309, 48);
-        btnAssignRole.MinimumSize = new System.Drawing.Size(104, 29);
-        btnAssignRole.Name = "btnAssignRole";
-        btnAssignRole.Size = new System.Drawing.Size(104, 30);
-        btnAssignRole.TabIndex = 18;
-        btnAssignRole.Text = "Assign Role";
-        btnAssignRole.Click += BtnAssignRoleClick;
+        btnAssignPerm.AutoSize = true;
+        btnAssignPerm.Location = new System.Drawing.Point(309, 48);
+        btnAssignPerm.MinimumSize = new System.Drawing.Size(104, 29);
+        btnAssignPerm.Name = "btnAssignPerm";
+        btnAssignPerm.Size = new System.Drawing.Size(104, 30);
+        btnAssignPerm.TabIndex = 18;
+        btnAssignPerm.Text = "Assign Permission";
+        btnAssignPerm.Click += BtnAssignPermClick;
         // 
-        // btnRemoveRole
+        // btnUnassignPerm
         // 
-        btnRemoveRole.AutoSize = true;
-        btnRemoveRole.Location = new System.Drawing.Point(309, 85);
-        btnRemoveRole.MinimumSize = new System.Drawing.Size(114, 29);
-        btnRemoveRole.Name = "btnRemoveRole";
-        btnRemoveRole.Size = new System.Drawing.Size(114, 30);
-        btnRemoveRole.TabIndex = 19;
-        btnRemoveRole.Text = "Remove Role";
-        btnRemoveRole.Click += BtnRemoveRoleClick;
+        btnUnassignPerm.AutoSize = true;
+        btnUnassignPerm.Location = new System.Drawing.Point(309, 85);
+        btnUnassignPerm.MinimumSize = new System.Drawing.Size(114, 29);
+        btnUnassignPerm.Name = "btnUnassignPerm";
+        btnUnassignPerm.Size = new System.Drawing.Size(114, 30);
+        btnUnassignPerm.TabIndex = 19;
+        btnUnassignPerm.Text = "Remove Permission";
+        btnUnassignPerm.Click += BtnUnassignPermClick;
         // 
         // lblUsername
         // 
@@ -120,14 +120,14 @@ partial class MainForm
         lblUsername.TabIndex = 11;
         lblUsername.Text = "Username:";
         // 
-        // lblRole
+        // lblPerm
         // 
-        lblRole.AutoSize = true;
-        lblRole.Location = new System.Drawing.Point(12, 52);
-        lblRole.Name = "lblRole";
-        lblRole.Size = new System.Drawing.Size(42, 20);
-        lblRole.TabIndex = 13;
-        lblRole.Text = "Role:";
+        lblPerm.AutoSize = true;
+        lblPerm.Location = new System.Drawing.Point(12, 52);
+        lblPerm.Name = "lblPerm";
+        lblPerm.Size = new System.Drawing.Size(42, 20);
+        lblPerm.TabIndex = 13;
+        lblPerm.Text = "Permission:";
         // 
         // lblPerms
         // 
@@ -149,16 +149,16 @@ partial class MainForm
         btnSearch.Text = "Search";
         btnSearch.Click += BtnSearchClick;
         // 
-        // btnUserRoles
+        // btnUserPerms
         // 
-        btnUserRoles.AutoSize = true;
-        btnUserRoles.Location = new System.Drawing.Point(309, 159);
-        btnUserRoles.MinimumSize = new System.Drawing.Size(114, 29);
-        btnUserRoles.Name = "btnUserRoles";
-        btnUserRoles.Size = new System.Drawing.Size(128, 30);
-        btnUserRoles.TabIndex = 21;
-        btnUserRoles.Text = "Show User Roles";
-        btnUserRoles.Click += BtnUserRolesClick;
+        btnUserPerms.AutoSize = true;
+        btnUserPerms.Location = new System.Drawing.Point(309, 159);
+        btnUserPerms.MinimumSize = new System.Drawing.Size(114, 29);
+        btnUserPerms.Name = "btnUserPerms";
+        btnUserPerms.Size = new System.Drawing.Size(128, 30);
+        btnUserPerms.TabIndex = 21;
+        btnUserPerms.Text = "Show User Roles";
+        btnUserPerms.Click += BtnUserPermsClick;
         // 
         // btnSort
         // 
@@ -243,15 +243,15 @@ partial class MainForm
         btnAddPermission.UseVisualStyleBackColor = true;
         btnAddPermission.Click += addPermissionButton_Click;
         // 
-        // btnRemovePermission
+        // btnDeletePermission
         // 
-        btnRemovePermission.Location = new System.Drawing.Point(382, 378);
-        btnRemovePermission.Name = "btnRemovePermission";
-        btnRemovePermission.Size = new System.Drawing.Size(94, 29);
-        btnRemovePermission.TabIndex = 6;
-        btnRemovePermission.Text = "Remove";
-        btnRemovePermission.UseVisualStyleBackColor = true;
-        btnRemovePermission.Click += removePermissionButton_Click;
+        btnDeletePermission.Location = new System.Drawing.Point(382, 378);
+        btnDeletePermission.Name = "btnDeletePermission";
+        btnDeletePermission.Size = new System.Drawing.Size(94, 29);
+        btnDeletePermission.TabIndex = 6;
+        btnDeletePermission.Text = "Remove";
+        btnDeletePermission.UseVisualStyleBackColor = true;
+        btnDeletePermission.Click += DeletePermissionButton_Click;
         // 
         // nudUserCount
         // 
@@ -332,22 +332,22 @@ partial class MainForm
         Controls.Add(lblNewPermission);
         Controls.Add(txbNewPermission);
         Controls.Add(btnAddPermission);
-        Controls.Add(btnRemovePermission);
+        Controls.Add(btnDeletePermission);
         Controls.Add(lblUserCount);
         Controls.Add(nudUserCount);
         Controls.Add(btnGenerateUsers);
         Controls.Add(btnRandomizePerms);
         Controls.Add(lblUsername);
         Controls.Add(txbUsername);
-        Controls.Add(lblRole);
-        Controls.Add(cmbRoles);
+        Controls.Add(lblPerm);
+        Controls.Add(cmbPerms);
         Controls.Add(lblPerms);
         Controls.Add(lsbPerms);
         Controls.Add(btnAddUser);
-        Controls.Add(btnAssignRole);
-        Controls.Add(btnRemoveRole);
+        Controls.Add(btnAssignPerm);
+        Controls.Add(btnUnassignPerm);
         Controls.Add(btnSearch);
-        Controls.Add(btnUserRoles);
+        Controls.Add(btnUserPerms);
         Controls.Add(cmbSortMethod);
         Controls.Add(btnSort);
         Controls.Add(lblSearchResults);
@@ -365,17 +365,17 @@ partial class MainForm
     #endregion
 
     private TextBox txbUsername;
-    private ComboBox cmbRoles;
+    private ComboBox cmbPerms;
     private ListBox lsbPerms;
     private Button btnAddUser;
-    private Button btnAssignRole;
-    private Button btnRemoveRole;
+    private Button btnAssignPerm;
+    private Button btnUnassignPerm;
     private Button btnSearch;
-    private Button btnUserRoles;
+    private Button btnUserPerms;
     private Button btnSort;
     private ComboBox cmbSortMethod;
     private Label lblUsername;
-    private Label lblRole;
+    private Label lblPerm;
     private Label lblPerms;
     private System.Windows.Forms.Label lblSearchResults;
     private System.Windows.Forms.ListBox lsbResults;
@@ -383,7 +383,7 @@ partial class MainForm
     private Label lblSearchType;
     private System.Windows.Forms.TextBox txbNewPermission;
     private System.Windows.Forms.Button btnAddPermission;
-    private System.Windows.Forms.Button btnRemovePermission;
+    private System.Windows.Forms.Button btnDeletePermission;
     private System.Windows.Forms.Label lblNewPermission;
     private System.Windows.Forms.NumericUpDown nudUserCount;
     private System.Windows.Forms.Button btnGenerateUsers;

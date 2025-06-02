@@ -44,9 +44,9 @@ public partial class MainForm : Form
         MessageBox.Show($"Added new permission type: {newPermission}");
     }
 
-    private void removePermissionButton_Click(object sender, EventArgs e)
+    private void DeletePermissionButton_Click(object sender, EventArgs e)
     {
-        string selectedPermission = cmbRoles.SelectedItem?.ToString();
+        string selectedPermission = cmbPerms.SelectedItem?.ToString();
 
         if (string.IsNullOrEmpty(selectedPermission))
         {
@@ -80,17 +80,17 @@ public partial class MainForm : Form
 
     private void RefreshRolesList()
     {
-        var selectedRole = cmbRoles.SelectedItem?.ToString();
-        cmbRoles.Items.Clear();
-        cmbRoles.Items.AddRange(permissions.Keys.ToArray());
+        var selectedRole = cmbPerms.SelectedItem?.ToString();
+        cmbPerms.Items.Clear();
+        cmbPerms.Items.AddRange(permissions.Keys.ToArray());
         
         if (!string.IsNullOrEmpty(selectedRole) && permissions.ContainsKey(selectedRole))
         {
-            cmbRoles.SelectedItem = selectedRole;
+            cmbPerms.SelectedItem = selectedRole;
         }
         else
         {
-            cmbRoles.SelectedIndex = 0;
+            cmbPerms.SelectedIndex = 0;
         }
     }
 
@@ -105,10 +105,10 @@ public partial class MainForm : Form
         }
     }
 
-    private void BtnAssignRoleClick(object sender, EventArgs e)
+    private void BtnAssignPermClick(object sender, EventArgs e)
     {
         string username = txbUsername.Text.Trim();
-        string role = cmbRoles.SelectedItem?.ToString();
+        string role = cmbPerms.SelectedItem?.ToString();
 
         if (!string.IsNullOrEmpty(username) && permissions.ContainsKey(role))
         {
@@ -123,10 +123,10 @@ public partial class MainForm : Form
         }
     }
 
-    private void BtnRemoveRoleClick(object sender, EventArgs e)
+    private void BtnUnassignPermClick(object sender, EventArgs e)
     {
         string username = txbUsername.Text.Trim();
-        string role = cmbRoles.SelectedItem?.ToString();
+        string role = cmbPerms.SelectedItem?.ToString();
 
         if (!string.IsNullOrEmpty(username) && permissions.ContainsKey(role))
         {
@@ -155,7 +155,7 @@ public partial class MainForm : Form
         // Binary Search - O(log n) - requires sorted array , Linear Search - O(n) time complexity
     {
         string searchUsername = txbUsername.Text.Trim();
-        string searchPermission = cmbRoles.SelectedItem?.ToString();
+        string searchPermission = cmbPerms.SelectedItem?.ToString();
         lsbResults.Items.Clear();
 
         if (string.IsNullOrEmpty(searchUsername) && string.IsNullOrEmpty(searchPermission))
@@ -294,7 +294,7 @@ public partial class MainForm : Form
         }
     }
 
-    private void BtnUserRolesClick(object sender, EventArgs e)
+    private void BtnUserPermsClick(object sender, EventArgs e)
     {
         string username = txbUsername.Text.Trim();
         if (string.IsNullOrEmpty(username)) return;
@@ -452,7 +452,7 @@ public partial class MainForm : Form
 
     private void RefreshPermsList()
     {
-        string selectedRole = cmbRoles.SelectedItem?.ToString();
+        string selectedRole = cmbPerms.SelectedItem?.ToString();
         lsbPerms.Items.Clear();
 
         if (!string.IsNullOrEmpty(selectedRole) && permissions.ContainsKey(selectedRole))
