@@ -184,14 +184,14 @@ public partial class MainForm : Form
             {
                 using (var timer = new OperationTimer("Binary Search of Users", permsDictionary.Count))
                 {
-                    searchResult = BinarySearch(searchUsername, permsDictionary, true);
+                    searchResult = Operations.BinarySearch(searchUsername, permsDictionary, true);
                 }
             }
             else
             {
                 using (var timer = new OperationTimer("Linear Search of Users", permsDictionary.Count))
                 {
-                    searchResult = LinearSearch(searchUsername, permsDictionary);
+                    searchResult = Operations.LinearSearch(searchUsername, permsDictionary);
                 }
             }
             searchTerm = searchUsername;
@@ -203,14 +203,14 @@ public partial class MainForm : Form
             {
                 using (var timer = new OperationTimer("Binary Search of Permissions", permsDictionary.Count))
                 {
-                    searchResult = BinarySearch(searchPermission, permsDictionary, false);
+                    searchResult = Operations.BinarySearch(searchPermission, permsDictionary, false);
                 }
             }
             else
             {
                 using (var timer = new OperationTimer("Linear Search of Permissions", permsDictionary.Count))
                 {
-                    searchResult = LinearSearch(searchPermission, permsDictionary);
+                    searchResult = Operations.LinearSearch(searchPermission, permsDictionary);
                 }
                 
             }
@@ -226,81 +226,6 @@ public partial class MainForm : Form
             }
         }
         
-    }
-    
-    private List<string> BinarySearch(string searchTerm, Dictionary<string, HashSet<string>> permissionsDict, bool isUserSearch)
-    {
-        List<string> searchResult = new List<string>();
-        List<(string Permission, string User)> tupleAllUserPerms = new List<(string Permission, string User)>();
-        foreach (var permission in permissionsDict)
-        {
-            foreach (var user in permission.Value)
-            {
-                tupleAllUserPerms.Add((permission.Key, user));
-            }
-        }
-        
-        tupleAllUserPerms = tupleAllUserPerms
-            .OrderBy(x => isUserSearch ? x.User : x.Permission)
-            .ToList();
-                
-        int left = 0;
-        int right = tupleAllUserPerms.Count - 1;
-        bool found = false;
-
-        while (left <= right)
-        {
-            int mid = left + (right - left) / 2;
-            int comparison = isUserSearch ? String.Compare(tupleAllUserPerms[mid].User, searchTerm) : String.Compare(tupleAllUserPerms[mid].Permission, searchTerm);
-
-            if (comparison == 0)
-            {
-                found = true;
-                var userPermissions = tupleAllUserPerms
-                    .Where(x => isUserSearch ? x.User == searchTerm : x.Permission == searchTerm)
-                    .Select(x => isUserSearch ? x.Permission : x.User)
-                    .Distinct()
-                    .ToList();
-
-                //searchResult.Add($"Permissions for user '{searchTerm}' (using Binary Search):");
-                foreach (var permission in userPermissions)
-                {
-                    searchResult.Add(permission);
-                }
-                break;
-            }
-
-            if (comparison < 0)
-                left = mid + 1;
-            else
-                right = mid - 1;
-        }
-
-        if (!found)
-        {
-            //searchResult.Add($"No permsDictionary found for user '{searchTerm}'");
-        }
-        
-        return searchResult;
-    }
-    
-    private List<string> LinearSearch(string searchTerm, Dictionary<string, HashSet<string>> permissionsDict)
-    {
-        List<string> searchResult = new List<string>();
-        foreach (var permission in permissionsDict)
-        {
-            if (permission.Value.Contains(searchTerm))
-            {
-                searchResult.Add(permission.Key);
-            }
-            
-            else if (permission.Key == searchTerm)
-            {
-                permissionsDict.TryGetValue(searchTerm, out var users);
-                searchResult = users.ToList();
-            }
-        }
-        return searchResult;
     }
 
     private void BtnUserPermsClick(object sender, EventArgs e)
@@ -346,21 +271,21 @@ public partial class MainForm : Form
             case "Bubble Sort":
                 using (var timer = new OperationTimer("Bubble Sort", items.Count))
                 {
-                    BubbleSort(items); // O(n²)
+                    Operations.BubbleSort(items); // O(n²)
                 }
 
                 break;
             case "Quick Sort":
                 using (var timer = new OperationTimer("Quick Sort", items.Count))
                 {
-                    QuickSort(items, 0, items.Count - 1); // O(n log n)
+                    Operations.QuickSort(items, 0, items.Count - 1); // O(n log n)
                 }
 
                 break;
             case "Merge Sort":
                 using (var timer = new OperationTimer("Merge Sort", items.Count))
                 {
-                    items = MergeSort(items); // O(n log n)
+                    items = Operations.MergeSort(items); // O(n log n)
                 }
 
                 break;
@@ -368,107 +293,6 @@ public partial class MainForm : Form
 
         lsbResults.Items.Clear();
         lsbResults.Items.AddRange(items.ToArray());
-    }
-
-    // Bubble Sort - O(n²)
-    private void BubbleSort(List<string> items)
-    {
-        int n = items.Count;
-        for (int i = 0; i < n - 1; i++)
-        {
-            for (int j = 0; j < n - i - 1; j++)
-            {
-                if (string.Compare(items[j], items[j + 1]) > 0)
-                {
-                    var temp = items[j];
-                    items[j] = items[j + 1];
-                    items[j + 1] = temp;
-                }
-            }
-        }
-    }
-
-    // Quick Sort - O(n log n)
-    private void QuickSort(List<string> items, int low, int high)
-    {
-        if (low < high)
-        {
-            int partitionIndex = Partition(items, low, high);
-            QuickSort(items, low, partitionIndex - 1);
-            QuickSort(items, partitionIndex + 1, high);
-        }
-    }
-
-    private int Partition(List<string> items, int low, int high)
-    {
-        string pivot = items[high];
-        int i = low - 1;
-
-        for (int j = low; j < high; j++)
-        {
-            if (string.Compare(items[j], pivot) <= 0)
-            {
-                i++;
-                var temp = items[i];
-                items[i] = items[j];
-                items[j] = temp;
-            }
-        }
-
-        var temp1 = items[i + 1];
-        items[i + 1] = items[high];
-        items[high] = temp1;
-
-        return i + 1;
-    }
-
-    // Merge Sort - O(n log n)
-    private List<string> MergeSort(List<string> items)
-    {
-        if (items.Count <= 1) return items;
-
-        int mid = items.Count / 2;
-        var left = items.GetRange(0, mid);
-        var right = items.GetRange(mid, items.Count - mid);
-
-        left = MergeSort(left);
-        right = MergeSort(right);
-
-        return Merge(left, right);
-    }
-
-    private List<string> Merge(List<string> left, List<string> right)
-    {
-        var result = new List<string>();
-        int leftIndex = 0, rightIndex = 0;
-
-        while (leftIndex < left.Count && rightIndex < right.Count)
-        {
-            if (string.Compare(left[leftIndex], right[rightIndex]) <= 0)
-            {
-                result.Add(left[leftIndex]);
-                leftIndex++;
-            }
-            else
-            {
-                result.Add(right[rightIndex]);
-                rightIndex++;
-            }
-        }
-
-        while (leftIndex < left.Count)
-        {
-            result.Add(left[leftIndex]);
-            leftIndex++;
-        }
-
-        while (rightIndex < right.Count)
-        {
-            result.Add(right[rightIndex]);
-            rightIndex++;
-        }
-
-        return result;
     }
 
     private void RefreshPermsList()
