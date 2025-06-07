@@ -190,152 +190,6 @@ public partial class MainForm : Form
         }
     }
 
-   
-    /*
-    private void BtnSearchClick(object sender, EventArgs e) 
-        // Binary Search - O(log n) - requires sorted array , Linear Search - O(n) time complexity
-    {
-        string searchUsername = txbUsername.Text.Trim();
-        string searchPermission = cmbPerms.SelectedItem?.ToString();
-        lsbResults.Items.Clear();
-
-        if (string.IsNullOrEmpty(searchUsername) && string.IsNullOrEmpty(searchPermission))
-        {
-            MessageBox.Show("Please enter a username or select a permission to search.");
-            return;
-        }
-
-        if (!string.IsNullOrEmpty(searchUsername))
-        {
-            if (cmbSearchMethod.SelectedItem.ToString() == "Linear Search")
-            {
-                
-                var userPermissions = new List<string>();
-                foreach (var permission in permsDictionary.Keys)
-                {
-                    if (permsDictionary[permission].Contains(searchUsername))
-                    {
-                        userPermissions.Add(permission);
-                    }
-                }
-
-                if (userPermissions.Count > 0)
-                {
-                    lsbResults.Items.Add($"Permissions for user '{searchUsername}' (using Linear Search):");
-                    foreach (var permission in userPermissions)
-                    {
-                        lsbResults.Items.Add($"- {permission}");
-                    }
-                }
-                else
-                {
-                    lsbResults.Items.Add($"No permsDictionary found for user '{searchUsername}'");
-                }
-            }
-            else
-            {
-                var allPermissionUsers = new List<(string Permission, string User)>();
-                foreach (var permission in permsDictionary)
-                {
-                    foreach (var user in permission.Value)
-                    {
-                        allPermissionUsers.Add((permission.Key, user));
-                    }
-                }
-                
-                allPermissionUsers = allPermissionUsers
-                    .OrderBy(x => x.User)
-                    .ToList();
-                
-                int left = 0;
-                int right = allPermissionUsers.Count - 1;
-                bool found = false;
-
-                while (left <= right)
-                {
-                    int mid = left + (right - left) / 2;
-                    int comparison = string.Compare(allPermissionUsers[mid].User, searchUsername);
-
-                    if (comparison == 0)
-                    {
-                        found = true;
-                        var userPermissions = allPermissionUsers
-                            .Where(x => x.User == searchUsername)
-                            .Select(x => x.Permission)
-                            .Distinct()
-                            .ToList();
-
-                        lsbResults.Items.Add($"Permissions for user '{searchUsername}' (using Binary Search):");
-                        foreach (var permission in userPermissions)
-                        {
-                            lsbResults.Items.Add($"- {permission}");
-                        }
-                        break;
-                    }
-
-                    if (comparison < 0)
-                        left = mid + 1;
-                    else
-                        right = mid - 1;
-                }
-
-                if (!found)
-                {
-                    lsbResults.Items.Add($"No permsDictionary found for user '{searchUsername}'");
-                }
-            }
-        }
-        else if (!string.IsNullOrEmpty(searchPermission))
-        {
-            if (permsDictionary.TryGetValue(searchPermission, out var users))
-            {
-                if (cmbSearchMethod.SelectedItem.ToString() == "Linear Search")
-                {
-                    // Linear Search - O(n)
-                    if (users.Count > 0)
-                    {
-                        lsbResults.Items.Add($"Users with permission '{searchPermission}' (using Linear Search):");
-                        foreach (var user in users)
-                        {
-                            lsbResults.Items.Add($"- {user}");
-                        }
-                    }
-                    else
-                    {
-                        lsbResults.Items.Add($"No users found with permission '{searchPermission}'");
-                    }
-                }
-                else
-                {
-                    var sortedUsers = users.OrderBy(x => x).ToList();
-
-                    if (sortedUsers.Count > 0)
-                    {
-                        lsbResults.Items.Add($"Users with permission '{searchPermission}' (using Binary Search):");
-                        foreach (var user in sortedUsers)
-                        {
-                            lsbResults.Items.Add($"- {user}");
-                        }
-                    }
-                    else
-                    {
-                        lsbResults.Items.Add($"No users found with permission '{searchPermission}'");
-                    }
-                }
-            }
-            else
-            {
-                lsbResults.Items.Add($"Permission '{searchPermission}' not found");
-            }
-        }
-
-        if (lsbResults.Items.Count == 0)
-        {
-            lsbResults.Items.Add("No results found");
-        }
-    }
-    */
-
     private void BtnSearchClick(object sender, EventArgs e)
         // Binary Search - O(log n) - requires sorted array , Linear Search - O(n) time complexity
     {
@@ -350,6 +204,8 @@ public partial class MainForm : Form
             MessageBox.Show("Please enter a username or select a permission to search.");
             return;
         }
+
+        Debug.Assert(cmbSearchMethod.SelectedItem != null, "cmbSearchMethod.SelectedItem != null");
         bool isBinarySearchType = cmbSearchMethod.SelectedItem.ToString() == "Binary Search";
         if (!string.IsNullOrEmpty(searchUsername))
         {
@@ -670,7 +526,14 @@ public partial class MainForm : Form
 	{
 		int userCount = (int)nudUserCount.Value;
 		int existingUsers = whitelist.Count;
-
+        
+        if (userCount < nudUserCount.Minimum + 1 || userCount > nudUserCount.Maximum - 1)
+        {
+            MessageBox.Show("Invalid number of users. Must be between " +
+                            $"{nudUserCount.Minimum} and {nudUserCount.Maximum}.");
+            return;
+        }
+        
 		for (int i = 0; i < userCount; i++)
 		{
 			string newUser = $"User_{existingUsers + i}";
@@ -748,7 +611,14 @@ private void generatePermissionsButton_Click(object sender, EventArgs e)
 {
     int permCount = (int)nudPermCount.Value;
     int existingPerms = permsDictionary.Count;
-    
+
+    if (permCount < nudPermCount.Minimum + 1 || permCount > nudPermCount.Maximum - 1)
+    {
+        MessageBox.Show("Invalid number of permissions. Must be between " +
+                        $"{nudPermCount.Minimum} and {nudPermCount.Maximum}.");
+        return;
+    }
+
     int startNumber = permsDictionary.Keys
         .Where(p => p.StartsWith("Perm_"))
         .Select(p => 

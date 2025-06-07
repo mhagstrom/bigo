@@ -19,6 +19,10 @@ partial class MainForm
     /// Required method for Designer support - do not modify
     /// the contents of this method with the code editor.
     /// </summary>
+
+    public int maxInputLength = 100000;
+    public int minInputLength = 0;
+    
     private void InitializeComponent()
     {
         txbUsername = new System.Windows.Forms.TextBox();
@@ -60,6 +64,9 @@ partial class MainForm
         txbUsername.Name = "txbUsername";
         txbUsername.Size = new System.Drawing.Size(200, 27);
         txbUsername.TabIndex = 12;
+        //MinLength does not exist in TextBoxBase class but MaxLength does, so instead of using
+        //MinLength I handle this on submit in the MainForm.cs
+        txbUsername.MaxLength = maxInputLength;
         // 
         // cmbPerms
         // 
@@ -232,6 +239,7 @@ partial class MainForm
         txbNewPermission.Name = "txbNewPermission";
         txbNewPermission.Size = new System.Drawing.Size(150, 27);
         txbNewPermission.TabIndex = 4;
+        txbNewPermission.MaxLength = maxInputLength;
         // 
         // btnAddPermission
         // 
@@ -256,12 +264,12 @@ partial class MainForm
         // nudUserCount
         // 
         nudUserCount.Location = new System.Drawing.Point(126, 420);
-        nudUserCount.Maximum = new decimal(new int[] { int.MaxValue, 0, 0, 0 });
-        nudUserCount.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+        nudUserCount.Maximum = maxInputLength;
+        nudUserCount.Minimum = minInputLength;
         nudUserCount.Name = "nudUserCount";
         nudUserCount.Size = new System.Drawing.Size(150, 27);
         nudUserCount.TabIndex = 8;
-        nudUserCount.Value = new decimal(new int[] { 100, 0, 0, 0 });
+        nudUserCount.Value = new decimal(new int[] { 0, 0, 0, 0 });
         // 
         // btnGenerateUsers
         // 
@@ -295,12 +303,12 @@ partial class MainForm
         // nudPermCount
         // 
         nudPermCount.Location = new System.Drawing.Point(126, 460);
-        nudPermCount.Maximum = new decimal(new int[] { int.MaxValue, 0, 0, 0 });
-        nudPermCount.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+        nudPermCount.Maximum = maxInputLength;
+        nudPermCount.Minimum = minInputLength;
         nudPermCount.Name = "nudPermCount";
         nudPermCount.Size = new System.Drawing.Size(150, 27);
         nudPermCount.TabIndex = 1;
-        nudPermCount.Value = new decimal(new int[] { 10, 0, 0, 0 });
+        nudPermCount.Value = new decimal(new int[] { 0, 0, 0, 0 });
         // 
         // btnGeneratePerms
         // 
