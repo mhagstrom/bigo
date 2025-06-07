@@ -2,7 +2,6 @@ using System.Diagnostics;
 
 namespace pjtUserPermsMgr;
 
-
 public partial class MainForm : Form
 {
     private HashSet<string> whitelist = new HashSet<string>();
@@ -16,7 +15,7 @@ public partial class MainForm : Form
     public MainForm()
     {
         InitializeComponent();
-        RefreshPermissionsList();
+        Operations.RefreshPermissionsList(cmbPerms, permsDictionary);
     }
 
     private void addPermissionButton_Click(object sender, EventArgs e)
@@ -43,7 +42,7 @@ public partial class MainForm : Form
         }
 
         permsDictionary.Add(newPermission, new HashSet<string>());
-        RefreshPermissionsList();
+        Operations.RefreshPermissionsList( cmbPerms, permsDictionary );
         MessageBox.Show($"Added new permission type: {newPermission}");
     }
 
@@ -76,32 +75,9 @@ public partial class MainForm : Form
         
         permsDictionary.Remove(selectedPermission);
         
-        RefreshPermissionsList();
+        Operations.RefreshPermissionsList( cmbPerms, permsDictionary );
         MessageBox.Show($"Removed permission type: {selectedPermission}\n" +
                        $"Users affected: {affectedUsers.Count}");
-    }
-
-    private void RefreshPermissionsList()
-    {
-        var selectedRole = cmbPerms.SelectedItem?.ToString();
-        cmbPerms.Items.Clear();
-        cmbPerms.Items.AddRange(permsDictionary.Keys.ToArray());
-        
-        if (!string.IsNullOrEmpty(selectedRole) && permsDictionary.ContainsKey(selectedRole))
-        {
-            cmbPerms.SelectedItem = selectedRole;
-        }
-        else
-        {
-            cmbPerms.SelectedIndex = 0;
-        }
-
-        foreach (KeyValuePair<string, HashSet<string>> element in permsDictionary)
-        {
-            List<string> users = element.Value.ToList();
-            
-            Console.WriteLine($"{element.Key}: {users}");
-        }
     }
 
     private void BtnAddUserClick(object sender, EventArgs e)
@@ -111,7 +87,6 @@ public partial class MainForm : Form
         {
             permsDictionary["NoPerms"].Add(username);
             MessageBox.Show($"Added {username} to whitelist with NoPerms role.");
-            RefreshPermsList();
         }
     }
 
@@ -129,7 +104,6 @@ public partial class MainForm : Form
         
             permsDictionary[role].Add(username);
             MessageBox.Show($"Assigned role {role} to {username}.");
-            RefreshPermsList();
         }
     }
 
@@ -155,8 +129,7 @@ public partial class MainForm : Form
                 {
                     MessageBox.Show($"Removed role {role} from {username}.");
                 }
-            
-                RefreshPermsList();
+                //add something here
             }
         }
     }
@@ -295,28 +268,6 @@ public partial class MainForm : Form
         lsbResults.Items.AddRange(items.ToArray());
     }
 
-    private void RefreshPermsList()
-    {
-        string selectedRole = cmbPerms.SelectedItem?.ToString();
-        lsbPerms.Items.Clear();
-
-        if (!string.IsNullOrEmpty(selectedRole) && permsDictionary.ContainsKey(selectedRole))
-        {
-            foreach (var user in permsDictionary[selectedRole])
-            {
-                lsbPerms.Items.Add(user);
-            }
-        }
-    }
-
-    private void permissionListBox_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        if (lsbPerms.SelectedItem != null)
-        {
-            txbUsername.Text = lsbPerms.SelectedItem.ToString();
-        }
-    }
-
 	private void generateUsersButton_Click(object sender, EventArgs e)
 	{
 		int userCount = (int)nudUserCount.Value;
@@ -336,7 +287,7 @@ public partial class MainForm : Form
 			permsDictionary["NoPerms"].Add(newUser);
 		}
 
-		RefreshPermsList();
+		//add probably the same something here
 		MessageBox.Show($"Generated {userCount} new users.\nTotal users: {whitelist.Count}");
 	}
 
@@ -388,7 +339,7 @@ public partial class MainForm : Form
                 .ToDictionary(x => x.Key, x => x.Value);
         }
 
-		RefreshPermsList();
+		//again same something here
         
 		var stats = whitelist
 			.Select(user => permsDictionary
@@ -434,7 +385,7 @@ private void generatePermissionsButton_Click(object sender, EventArgs e)
         }
     }
 
-    RefreshPermissionsList();
+    Operations.RefreshPermissionsList( cmbPerms, permsDictionary );
     
     MessageBox.Show($"Generated {permCount} new permsDictionary.\n" +
                    $"Total permsDictionary: {permsDictionary.Count}\n" +

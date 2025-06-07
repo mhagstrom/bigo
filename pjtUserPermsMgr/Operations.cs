@@ -177,4 +177,28 @@ public static class Operations
 
         return result;
     }
+    
+    public static void RefreshPermissionsList( ComboBox cmbPerms, Dictionary<string, HashSet<string>> permsDictionary )
+    {
+        
+        var selectedRole = cmbPerms.SelectedItem?.ToString();
+        cmbPerms.Items.Clear();
+        cmbPerms.Items.AddRange(permsDictionary.Keys.ToArray());
+        
+        if (!string.IsNullOrEmpty(selectedRole) && permsDictionary.ContainsKey(selectedRole))
+        {
+            cmbPerms.SelectedItem = selectedRole;
+        }
+        else
+        {
+            cmbPerms.SelectedIndex = 0;
+        }
+
+        foreach (KeyValuePair<string, HashSet<string>> element in permsDictionary)
+        {
+            List<string> users = element.Value.ToList();
+            
+            Console.WriteLine($"{element.Key}: {users}");
+        }
+    }
 }

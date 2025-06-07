@@ -19,21 +19,15 @@ partial class MainForm
     /// Required method for Designer support - do not modify
     /// the contents of this method with the code editor.
     /// </summary>
-
-    public int maxInputLength = 100000;
-    public int minInputLength = 0;
-    
     private void InitializeComponent()
     {
         txbUsername = new System.Windows.Forms.TextBox();
         cmbPerms = new System.Windows.Forms.ComboBox();
-        lsbPerms = new System.Windows.Forms.ListBox();
         btnAddUser = new System.Windows.Forms.Button();
         btnAssignPerm = new System.Windows.Forms.Button();
         btnUnassignPerm = new System.Windows.Forms.Button();
         lblUsername = new System.Windows.Forms.Label();
         lblPerm = new System.Windows.Forms.Label();
-        lblPerms = new System.Windows.Forms.Label();
         btnSearch = new System.Windows.Forms.Button();
         btnUserPerms = new System.Windows.Forms.Button();
         btnSort = new System.Windows.Forms.Button();
@@ -60,13 +54,11 @@ partial class MainForm
         // txbUsername
         // 
         txbUsername.Location = new System.Drawing.Point(93, 12);
+        txbUsername.MaxLength = 64;
         txbUsername.MinimumSize = new System.Drawing.Size(200, 27);
         txbUsername.Name = "txbUsername";
         txbUsername.Size = new System.Drawing.Size(200, 27);
         txbUsername.TabIndex = 12;
-        //MinLength does not exist in TextBoxBase class but MaxLength does, so instead of using
-        //MinLength I handle this on submit in the MainForm.cs
-        txbUsername.MaxLength = maxInputLength;
         // 
         // cmbPerms
         // 
@@ -76,14 +68,6 @@ partial class MainForm
         cmbPerms.Name = "cmbPerms";
         cmbPerms.Size = new System.Drawing.Size(200, 28);
         cmbPerms.TabIndex = 14;
-        // 
-        // lsbPerms
-        // 
-        lsbPerms.Location = new System.Drawing.Point(12, 115);
-        lsbPerms.MinimumSize = new System.Drawing.Size(281, 244);
-        lsbPerms.Name = "lsbPerms";
-        lsbPerms.Size = new System.Drawing.Size(281, 244);
-        lsbPerms.TabIndex = 16;
         // 
         // btnAddUser
         // 
@@ -99,10 +83,10 @@ partial class MainForm
         // btnAssignPerm
         // 
         btnAssignPerm.AutoSize = true;
-        btnAssignPerm.Location = new System.Drawing.Point(309, 48);
+        btnAssignPerm.Location = new System.Drawing.Point(12, 85);
         btnAssignPerm.MinimumSize = new System.Drawing.Size(104, 29);
         btnAssignPerm.Name = "btnAssignPerm";
-        btnAssignPerm.Size = new System.Drawing.Size(104, 30);
+        btnAssignPerm.Size = new System.Drawing.Size(136, 30);
         btnAssignPerm.TabIndex = 18;
         btnAssignPerm.Text = "Assign Permission";
         btnAssignPerm.Click += BtnAssignPermClick;
@@ -110,10 +94,10 @@ partial class MainForm
         // btnUnassignPerm
         // 
         btnUnassignPerm.AutoSize = true;
-        btnUnassignPerm.Location = new System.Drawing.Point(309, 85);
+        btnUnassignPerm.Location = new System.Drawing.Point(154, 85);
         btnUnassignPerm.MinimumSize = new System.Drawing.Size(114, 29);
         btnUnassignPerm.Name = "btnUnassignPerm";
-        btnUnassignPerm.Size = new System.Drawing.Size(114, 30);
+        btnUnassignPerm.Size = new System.Drawing.Size(147, 30);
         btnUnassignPerm.TabIndex = 19;
         btnUnassignPerm.Text = "Remove Permission";
         btnUnassignPerm.Click += BtnUnassignPermClick;
@@ -132,23 +116,14 @@ partial class MainForm
         lblPerm.AutoSize = true;
         lblPerm.Location = new System.Drawing.Point(12, 52);
         lblPerm.Name = "lblPerm";
-        lblPerm.Size = new System.Drawing.Size(42, 20);
+        lblPerm.Size = new System.Drawing.Size(82, 20);
         lblPerm.TabIndex = 13;
         lblPerm.Text = "Permission:";
-        // 
-        // lblPerms
-        // 
-        lblPerms.AutoSize = true;
-        lblPerms.Location = new System.Drawing.Point(12, 92);
-        lblPerms.Name = "lblPerms";
-        lblPerms.Size = new System.Drawing.Size(88, 20);
-        lblPerms.TabIndex = 15;
-        lblPerms.Text = "Permissions:";
         // 
         // btnSearch
         // 
         btnSearch.AutoSize = true;
-        btnSearch.Location = new System.Drawing.Point(309, 122);
+        btnSearch.Location = new System.Drawing.Point(771, 365);
         btnSearch.MinimumSize = new System.Drawing.Size(114, 29);
         btnSearch.Name = "btnSearch";
         btnSearch.Size = new System.Drawing.Size(114, 30);
@@ -159,7 +134,7 @@ partial class MainForm
         // btnUserPerms
         // 
         btnUserPerms.AutoSize = true;
-        btnUserPerms.Location = new System.Drawing.Point(309, 159);
+        btnUserPerms.Location = new System.Drawing.Point(309, 49);
         btnUserPerms.MinimumSize = new System.Drawing.Size(114, 29);
         btnUserPerms.Name = "btnUserPerms";
         btnUserPerms.Size = new System.Drawing.Size(128, 30);
@@ -170,7 +145,7 @@ partial class MainForm
         // btnSort
         // 
         btnSort.AutoSize = true;
-        btnSort.Location = new System.Drawing.Point(309, 233);
+        btnSort.Location = new System.Drawing.Point(771, 411);
         btnSort.MinimumSize = new System.Drawing.Size(114, 29);
         btnSort.Name = "btnSort";
         btnSort.Size = new System.Drawing.Size(114, 30);
@@ -189,36 +164,36 @@ partial class MainForm
         // 
         // lsbResults
         // 
-        lsbResults.Location = new System.Drawing.Point(461, 35);
+        lsbResults.Location = new System.Drawing.Point(534, 35);
         lsbResults.MinimumSize = new System.Drawing.Size(281, 321);
         lsbResults.Name = "lsbResults";
-        lsbResults.Size = new System.Drawing.Size(457, 304);
+        lsbResults.Size = new System.Drawing.Size(384, 304);
         lsbResults.TabIndex = 25;
         // 
         // cmbSortMethod
         // 
         cmbSortMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
         cmbSortMethod.Items.AddRange(new object[] { "Bubble Sort", "Quick Sort", "Merge Sort" });
-        cmbSortMethod.Location = new System.Drawing.Point(309, 196);
+        cmbSortMethod.Location = new System.Drawing.Point(557, 411);
         cmbSortMethod.MinimumSize = new System.Drawing.Size(114, 0);
         cmbSortMethod.Name = "cmbSortMethod";
-        cmbSortMethod.Size = new System.Drawing.Size(114, 28);
+        cmbSortMethod.Size = new System.Drawing.Size(186, 28);
         cmbSortMethod.TabIndex = 22;
         // 
         // cmbSearchMethod
         // 
         cmbSearchMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
         cmbSearchMethod.Items.AddRange(new object[] { "Linear Search", "Binary Search" });
-        cmbSearchMethod.Location = new System.Drawing.Point(309, 293);
+        cmbSearchMethod.Location = new System.Drawing.Point(557, 367);
         cmbSearchMethod.MinimumSize = new System.Drawing.Size(114, 0);
         cmbSearchMethod.Name = "cmbSearchMethod";
-        cmbSearchMethod.Size = new System.Drawing.Size(114, 28);
+        cmbSearchMethod.Size = new System.Drawing.Size(186, 28);
         cmbSearchMethod.TabIndex = 27;
         // 
         // lblSearchType
         // 
         lblSearchType.AutoSize = true;
-        lblSearchType.Location = new System.Drawing.Point(309, 270);
+        lblSearchType.Location = new System.Drawing.Point(557, 341);
         lblSearchType.Name = "lblSearchType";
         lblSearchType.Size = new System.Drawing.Size(112, 20);
         lblSearchType.TabIndex = 26;
@@ -227,7 +202,7 @@ partial class MainForm
         // lblNewPermission
         // 
         lblNewPermission.AutoSize = true;
-        lblNewPermission.Location = new System.Drawing.Point(11, 382);
+        lblNewPermission.Location = new System.Drawing.Point(4, 124);
         lblNewPermission.Name = "lblNewPermission";
         lblNewPermission.Size = new System.Drawing.Size(116, 20);
         lblNewPermission.TabIndex = 3;
@@ -235,15 +210,15 @@ partial class MainForm
         // 
         // txbNewPermission
         // 
-        txbNewPermission.Location = new System.Drawing.Point(126, 379);
+        txbNewPermission.Location = new System.Drawing.Point(133, 121);
+        txbNewPermission.MaxLength = 64;
         txbNewPermission.Name = "txbNewPermission";
-        txbNewPermission.Size = new System.Drawing.Size(150, 27);
+        txbNewPermission.Size = new System.Drawing.Size(186, 27);
         txbNewPermission.TabIndex = 4;
-        txbNewPermission.MaxLength = maxInputLength;
         // 
         // btnAddPermission
         // 
-        btnAddPermission.Location = new System.Drawing.Point(282, 378);
+        btnAddPermission.Location = new System.Drawing.Point(325, 121);
         btnAddPermission.Name = "btnAddPermission";
         btnAddPermission.Size = new System.Drawing.Size(94, 29);
         btnAddPermission.TabIndex = 5;
@@ -253,7 +228,7 @@ partial class MainForm
         // 
         // btnDeletePermission
         // 
-        btnDeletePermission.Location = new System.Drawing.Point(382, 378);
+        btnDeletePermission.Location = new System.Drawing.Point(425, 121);
         btnDeletePermission.Name = "btnDeletePermission";
         btnDeletePermission.Size = new System.Drawing.Size(94, 29);
         btnDeletePermission.TabIndex = 6;
@@ -263,38 +238,36 @@ partial class MainForm
         // 
         // nudUserCount
         // 
-        nudUserCount.Location = new System.Drawing.Point(126, 420);
-        nudUserCount.Maximum = maxInputLength;
-        nudUserCount.Minimum = minInputLength;
+        nudUserCount.Location = new System.Drawing.Point(12, 225);
+        nudUserCount.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
         nudUserCount.Name = "nudUserCount";
-        nudUserCount.Size = new System.Drawing.Size(150, 27);
+        nudUserCount.Size = new System.Drawing.Size(115, 27);
         nudUserCount.TabIndex = 8;
-        nudUserCount.Value = new decimal(new int[] { 0, 0, 0, 0 });
         // 
         // btnGenerateUsers
         // 
-        btnGenerateUsers.Location = new System.Drawing.Point(282, 419);
+        btnGenerateUsers.Location = new System.Drawing.Point(133, 223);
         btnGenerateUsers.Name = "btnGenerateUsers";
-        btnGenerateUsers.Size = new System.Drawing.Size(94, 29);
+        btnGenerateUsers.Size = new System.Drawing.Size(186, 29);
         btnGenerateUsers.TabIndex = 9;
-        btnGenerateUsers.Text = "Generate";
+        btnGenerateUsers.Text = "Generate Users";
         btnGenerateUsers.UseVisualStyleBackColor = true;
         btnGenerateUsers.Click += generateUsersButton_Click;
         // 
         // btnRandomizePerms
         // 
-        btnRandomizePerms.Location = new System.Drawing.Point(382, 419);
+        btnRandomizePerms.Location = new System.Drawing.Point(133, 376);
         btnRandomizePerms.Name = "btnRandomizePerms";
-        btnRandomizePerms.Size = new System.Drawing.Size(94, 29);
+        btnRandomizePerms.Size = new System.Drawing.Size(168, 78);
         btnRandomizePerms.TabIndex = 10;
-        btnRandomizePerms.Text = "Randomize";
+        btnRandomizePerms.Text = "Randomize Perm Assignments";
         btnRandomizePerms.UseVisualStyleBackColor = true;
         btnRandomizePerms.Click += randomizePermsButton_Click;
         // 
         // lblUserCount
         // 
         lblUserCount.AutoSize = true;
-        lblUserCount.Location = new System.Drawing.Point(11, 422);
+        lblUserCount.Location = new System.Drawing.Point(4, 202);
         lblUserCount.Name = "lblUserCount";
         lblUserCount.Size = new System.Drawing.Size(123, 20);
         lblUserCount.TabIndex = 7;
@@ -302,17 +275,15 @@ partial class MainForm
         // 
         // nudPermCount
         // 
-        nudPermCount.Location = new System.Drawing.Point(126, 460);
-        nudPermCount.Maximum = maxInputLength;
-        nudPermCount.Minimum = minInputLength;
+        nudPermCount.Location = new System.Drawing.Point(12, 293);
+        nudPermCount.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
         nudPermCount.Name = "nudPermCount";
-        nudPermCount.Size = new System.Drawing.Size(150, 27);
+        nudPermCount.Size = new System.Drawing.Size(115, 27);
         nudPermCount.TabIndex = 1;
-        nudPermCount.Value = new decimal(new int[] { 0, 0, 0, 0 });
         // 
         // btnGeneratePerms
         // 
-        btnGeneratePerms.Location = new System.Drawing.Point(282, 459);
+        btnGeneratePerms.Location = new System.Drawing.Point(133, 291);
         btnGeneratePerms.Name = "btnGeneratePerms";
         btnGeneratePerms.Size = new System.Drawing.Size(194, 29);
         btnGeneratePerms.TabIndex = 2;
@@ -323,7 +294,7 @@ partial class MainForm
         // lblPermCount
         // 
         lblPermCount.AutoSize = true;
-        lblPermCount.Location = new System.Drawing.Point(11, 462);
+        lblPermCount.Location = new System.Drawing.Point(4, 270);
         lblPermCount.Name = "lblPermCount";
         lblPermCount.Size = new System.Drawing.Size(122, 20);
         lblPermCount.TabIndex = 0;
@@ -333,7 +304,7 @@ partial class MainForm
         // 
         AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
         AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-        ClientSize = new System.Drawing.Size(971, 591);
+        ClientSize = new System.Drawing.Size(971, 515);
         Controls.Add(lblPermCount);
         Controls.Add(nudPermCount);
         Controls.Add(btnGeneratePerms);
@@ -349,8 +320,6 @@ partial class MainForm
         Controls.Add(txbUsername);
         Controls.Add(lblPerm);
         Controls.Add(cmbPerms);
-        Controls.Add(lblPerms);
-        Controls.Add(lsbPerms);
         Controls.Add(btnAddUser);
         Controls.Add(btnAssignPerm);
         Controls.Add(btnUnassignPerm);
@@ -374,21 +343,19 @@ partial class MainForm
 
     private TextBox txbUsername;
     private ComboBox cmbPerms;
-    private ListBox lsbPerms;
     private Button btnAddUser;
-    private Button btnAssignPerm;
-    private Button btnUnassignPerm;
-    private Button btnSearch;
-    private Button btnUserPerms;
-    private Button btnSort;
-    private ComboBox cmbSortMethod;
+    private System.Windows.Forms.Button btnAssignPerm;
+    private System.Windows.Forms.Button btnUnassignPerm;
+    private System.Windows.Forms.Button btnSearch;
+    private System.Windows.Forms.Button btnUserPerms;
+    private System.Windows.Forms.Button btnSort;
+    private System.Windows.Forms.ComboBox cmbSortMethod;
     private Label lblUsername;
     private Label lblPerm;
-    private Label lblPerms;
     private System.Windows.Forms.Label lblSearchResults;
     private System.Windows.Forms.ListBox lsbResults;
-    private ComboBox cmbSearchMethod;
-    private Label lblSearchType;
+    private System.Windows.Forms.ComboBox cmbSearchMethod;
+    private System.Windows.Forms.Label lblSearchType;
     private System.Windows.Forms.TextBox txbNewPermission;
     private System.Windows.Forms.Button btnAddPermission;
     private System.Windows.Forms.Button btnDeletePermission;
